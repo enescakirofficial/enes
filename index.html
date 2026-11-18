@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piyasa Defteri</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Piyasa">
+<meta name="theme-color" content="#0d1411">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABtElEQVR42u3dsQ0AIAwDwfQsyA7sX8MCtJFAPvQTxNdTY03pWjmB4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEx7fthgcHHHDAAQcccAgOwSE44IADDjjggAMOOOCAAw444IADDsEhOASHLeGAAw444IADDjjggAMOOOCAQ3AIDsEhOOCAAw444HhzKjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjgyJkKDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAA46oXxMEh+AQHIJDcAgOwSE4BIcEh+AQHIJDcAgOwSE4BIfgkOAQHIJDcAgOwSE4BIfgEBwSHIJDcAgOwSE4BIfgEBzK6AAgmp2a39T5cQAAAABJRU5ErkJggg==">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABtElEQVR42u3dsQ0AIAwDwfQsyA7sX8MCtJFAPvQTxNdTY03pWjmB4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEx7fthgcHHHDAAQcccAgOwSE44IADDjjggAMOOOCAAw444IADDsEhOASHLeGAAw444IADDjjggAMOOOCAQ3AIDsEhOOCAAw444HhzKjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjgyJkKDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAAw444IADDjjggAMOOOCAA46oXxMEh+AQHIJDcAgOwSE4BIcEh+AQHIJDcAgOwSE4BIfgkOAQHIJDcAgOwSE4BIfgEBwSHIJDcAgOwSE4BIfgEBzK6AAgmp2a39T5cQAAAABJRU5ErkJggg==">
+<style>
+:root {
+  --bg: #f2f4f1; --surface: #ffffff; --fg: #15211c; --muted: #5c6b64; --line: #dde3de;
+  --accent: #0b6b58; --accent-soft: #dcefe9;
+  --up: #11803f; --up-bg: rgba(17,128,63,.12); --down: #c2362b; --down-bg: rgba(194,54,43,.12);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1411; --surface: #151f1b; --fg: #e8eeea; --muted: #93a39b; --line: #26332d;
+    --accent: #4cc3a6; --accent-soft: #17332b;
+    --up: #4fd184; --up-bg: rgba(79,209,132,.15); --down: #ff7a6e; --down-bg: rgba(255,122,110,.15);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 15px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  padding-top: max(14px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(28px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(14px, env(safe-area-inset-left, 0px));
+  padding-right: max(14px, env(safe-area-inset-right, 0px));
+}
+.app { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.num { font-variant-numeric: tabular-nums; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 2px 2px; }
+header h1 { margin: 0; font-size: 24px; letter-spacing: -0.02em; font-weight: 700; }
+header h1 span { color: var(--accent); }
+header .stamp { color: var(--muted); font-size: 12.5px; }
+#refresh { appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--fg); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+#refresh svg { width: 20px; height: 20px; }
+#refresh.spin svg { animation: rot 0.9s linear infinite; }
+@keyframes rot { to { transform: rotate(360deg); } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; min-width: 0; }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.card-h h2 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.meta { font-size: 11.5px; color: var(--muted); }
+.meta.bad { color: var(--down); }
+.weather { display: flex; align-items: center; gap: 14px; }
+.weather .ic svg { width: 54px; height: 54px; color: var(--accent); display: block; }
+.w-temp { font-size: 38px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; }
+.w-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.w-days { display: flex; gap: 12px; margin-left: auto; }
+.w-day { text-align: center; font-size: 11.5px; color: var(--muted); }
+.w-day svg { width: 24px; height: 24px; color: var(--accent); display: block; margin: 2px auto; }
+.w-day b { display: block; color: var(--fg); font-size: 13px; font-weight: 600; }
+.status { display: flex; flex-direction: column; gap: 8px; }
+.srow { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.pill i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.closed { background: var(--down-bg); color: var(--down); }
+.clock { font-size: 13px; color: var(--muted); }
+.idx { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.idx .n { font-size: 14px; font-weight: 600; }
+.idx .v { font-size: 34px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+.idx svg { width: 110px; height: 44px; flex: none; }
+.sub { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; }
+.sub h3 { margin: 0 0 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.row { display: grid; grid-template-columns: 1fr 64px auto; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); min-height: 52px; }
+.row:last-child { border-bottom: 0; padding-bottom: 2px; }
+.row .t { font-weight: 600; font-size: 15px; }
+.row .d { color: var(--muted); font-size: 12px; }
+.row .r { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.row .p { font-weight: 600; font-size: 15px; }
+.chg { font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 6px; display: inline-block; }
+.chg.up { color: var(--up); background: var(--up-bg); }
+.chg.down { color: var(--down); background: var(--down-bg); }
+.chg.flat { color: var(--muted); }
+.spark { width: 64px; height: 24px; display: block; }
+.up { color: var(--up); } .down { color: var(--down); }
+.srow2 { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.srow2:last-child { border-bottom: 0; padding-bottom: 2px; }
+.srow2 .t { font-weight: 600; } .srow2 .d { color: var(--muted); font-size: 12px; }
+.srow2 .r { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 6px 0; }
+footer { color: var(--muted); font-size: 11.5px; padding: 4px 4px 0; }
+@media (prefers-reduced-motion: reduce) { #refresh.spin svg { animation: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Piyasa <span>Defteri</span></h1>
+      <div class="stamp" id="stamp">Yükleniyor…</div>
+    </div>
+    <button id="refresh" aria-label="Yenile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></button>
+  </header>
+
+  <section class="card" aria-label="Hava durumu">
+    <div class="card-h"><h2 id="w-city">Hava durumu</h2><span class="meta" id="m-weather"></span></div>
+    <div id="b-weather"><div class="empty">Yükleniyor…</div></div>
+  </section>
+
+  <section class="card" aria-label="Piyasa durumu">
+    <div class="card-h"><h2>Piyasa durumu</h2></div>
+    <div class="status">
+      <div class="srow"><span>Borsa İstanbul</span><span class="pill closed" id="bist-pill"><i></i><span id="bist-text">—</span></span></div>
+      <div class="srow"><span>Kripto</span><span class="pill"><i></i>7/24 açık</span></div>
+      <div class="clock" id="clock"></div>
+    </div>
+  </section>
+
+  <section class="card" aria-label="Borsa İstanbul">
+    <div class="card-h"><h2>Borsa İstanbul</h2><span class="meta" id="m-bist"></span></div>
+    <div id="b-bist"><div class="empty">Yükleniyor…</div></div>
+  </section>
+
+  <section class="card" aria-label="Döviz ve metaller">
+    <div class="card-h"><h2>Döviz ve metaller</h2><span class="meta" id="m-fx"></span></div>
+    <div id="b-fx"><div class="empty">Yükleniyor…</div></div>
+  </section>
+
+  <section class="card" aria-label="Kripto">
+    <div class="card-h"><h2>Kripto</h2><span class="meta" id="m-crypto"></span></div>
+    <div id="b-crypto"><div class="empty">Yükleniyor…</div></div>
+  </section>
+
+  <footer>
+    Kaynaklar: Open-Meteo (hava), CoinGecko (kripto), Frankfurter/ECB (günlük kur), Gold-API (altın, gümüş), Yahoo Finance (BIST, gecikmeli olabilir). Bilgi amaçlıdır, yatırım tavsiyesi değildir.
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Ayarlar: şehir ve BIST'te izlenecek hisse listesi buradan değişir.
+  var CFG = {
+    city: "İstanbul", lat: 41.0138, lon: 28.9497,
+    stocks: [
+      ["THYAO", "Türk Hava Yolları"], ["SASA", "Sasa Polyester"], ["EREGL", "Ereğli Demir Çelik"],
+      ["ASELS", "Aselsan"], ["GARAN", "Garanti BBVA"], ["AKBNK", "Akbank"],
+      ["KCHOL", "Koç Holding"], ["BIMAS", "BİM Mağazalar"], ["TUPRS", "Tüpraş"],
+      ["PGSUS", "Pegasus"], ["ISCTR", "İş Bankası"], ["YKBNK", "Yapı Kredi"]
+    ]
+  };
+  var COINS = [["bitcoin", "Bitcoin", "BTC"], ["ethereum", "Ethereum", "ETH"], ["solana", "Solana", "SOL"], ["avalanche-2", "Avalanche", "AVAX"]];
+
+  function $(id) { return document.getElementById(id); }
+  var S = {};
+  try { S = JSON.parse(localStorage.getItem("pd_v1") || "{}") || {}; } catch (e) { S = {}; }
+  S.times = S.times || {};
+  var failed = {};
+  function save() { try { localStorage.setItem("pd_v1", JSON.stringify(S)); } catch (e) {} }
+
+  function fmt(n, d) { return Number(n).toLocaleString("tr-TR", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function usd(n) { return "$" + fmt(n, n >= 1000 ? 0 : 2); }
+  function sign(c) { return (c > 0 ? "+" : c < 0 ? "−" : "") + fmt(Math.abs(c), 2) + "%"; }
+  function cls(c) { return c >= 0 ? "up" : "down"; }
+  function hhmm(t) { return new Date(t).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }); }
+  function fmtTL(n) { return n >= 1e9 ? fmt(n / 1e9, 1) + " mlr ₺" : fmt(n / 1e6, 0) + " mn ₺"; }
+  function chgHTML(c) {
+    if (c == null || isNaN(c)) return '<span class="chg flat num">—</span>';
+    return '<span class="chg ' + cls(c) + ' num">' + sign(c) + "</span>";
+  }
+  function down(arr, n) {
+    if (arr.length <= n) return arr;
+    var out = [], step = (arr.length - 1) / (n - 1);
+    for (var i = 0; i < n; i++) out.push(arr[Math.round(i * step)]);
+    return out;
+  }
+  function spark(arr, w, h, c, cl) {
+    if (!arr || arr.length < 2) return '<span></span>';
+    var mn = Math.min.apply(null, arr), mx = Math.max.apply(null, arr), r = (mx - mn) || 1;
+    var pts = arr.map(function (v, i) {
+      return (i / (arr.length - 1) * w).toFixed(1) + "," + (h - 2 - (v - mn) / r * (h - 4)).toFixed(1);
+    });
+    var line = pts.join(" ");
+    var area = "0," + h + " " + line + " " + w + "," + h;
+    return '<svg class="' + (cl || "spark") + " " + cls(c == null ? 0 : c) + '" viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<polygon points="' + area + '" fill="currentColor" opacity=".12"/>' +
+      '<polyline points="' + line + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+  }
+  function row(o) {
+    return '<div class="row"><div><div class="t">' + o.t + '</div><div class="d">' + o.d + "</div></div>" +
+      spark(o.s, 64, 24, o.c) +
+      '<div class="r"><div class="p num">' + o.p + "</div>" + chgHTML(o.c) + "</div></div>";
+  }
+
+  // ---- Ağ ----
+  function getJSON(urls, ms) {
+    var i = 0;
+    function next() {
+      if (i >= urls.length) return Promise.reject(new Error("fail"));
+      var u = urls[i++];
+      var ctl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+      var to = setTimeout(function () { if (ctl) ctl.abort(); }, ms || 9000);
+      return fetch(u, { signal: ctl ? ctl.signal : undefined, cache: "no-store" }).then(function (r) {
+        clearTimeout(to);
+        if (!r.ok) throw new Error("http " + r.status);
+        return r.json();
+      }).catch(function () { clearTimeout(to); return next(); });
+    }
+    return next();
+  }
+  function viaProxy(u) {
+    return [u, "https://api.allorigins.win/raw?url=" + encodeURIComponent(u), "https://corsproxy.io/?url=" + encodeURIComponent(u)];
+  }
+  function mapLimit(items, limit, fn) {
+    var res = new Array(items.length), idx = 0;
+    function worker() {
+      if (idx >= items.length) return Promise.resolve();
+      var i = idx++;
+      return fn(items[i]).then(function (v) { res[i] = v; }, function () { res[i] = null; }).then(worker);
+    }
+    var ws = []; for (var k = 0; k < Math.min(limit, items.length); k++) ws.push(worker());
+    return Promise.all(ws).then(function () { return res; });
+  }
+  function setMeta(key, text, bad) {
+    var el = $("m-" + key); if (!el) return;
+    el.textContent = text; el.className = "meta" + (bad ? " bad" : "");
+  }
+  function metaFor(key, group) {
+    var t = S.times[group || key];
+    if (failed[group || key]) setMeta(key, t ? "eski veri · " + hhmm(t) : "alınamadı", true);
+    else if (t) setMeta(key, "güncel · " + hhmm(t), false);
+  }
+  function stamp() {
+    var ts = Object.keys(S.times).map(function (k) { return S.times[k]; });
+    $("stamp").textContent = ts.length ? "Son güncelleme " + hhmm(Math.max.apply(null, ts)) : "Veri bekleniyor…";
+  }
+
+  // ---- Hava durumu ----
+  var WCODE = function (c) {
+    if (c === 0) return "Açık"; if (c === 1) return "Çoğunlukla açık"; if (c === 2) return "Parçalı bulutlu"; if (c === 3) return "Kapalı";
+    if (c === 45 || c === 48) return "Sisli"; if (c >= 51 && c <= 57) return "Çisenti";
+    if (c >= 61 && c <= 67) return "Yağmurlu"; if (c >= 71 && c <= 77) return "Karlı";
+    if (c >= 80 && c <= 82) return "Sağanak"; if (c === 85 || c === 86) return "Kar sağanağı"; if (c >= 95) return "Gök gürültülü fırtına";
+    return "—";
+  };
+  function wIcon(code) {
+    var a = 'viewBox="0 0 48 52" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+    var cloud = '<path d="M16 34a7 7 0 0 1 .8-13.9A9 9 0 0 1 34 22a6 6 0 0 1 0 12z"/>';
+    var inner;
+    if (code === 0 || code === 1) inner = '<circle cx="24" cy="26" r="7"/><path d="M24 10v4M24 38v4M8 26h4M36 26h4M12.7 14.7l2.8 2.8M32.5 34.5l2.8 2.8M12.7 37.3l2.8-2.8M32.5 17.5l2.8-2.8"/>';
+    else if (code === 2) inner = '<circle cx="17" cy="14" r="5"/><path d="M17 4v2M7 14h2M10 7l1.5 1.5M24 7l-1.5 1.5"/>' + cloud;
+    else if (code === 3) inner = cloud;
+    else if (code === 45 || code === 48) inner = cloud + '<path d="M12 40h24M16 45h16"/>';
+    else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) inner = cloud + '<path d="M18 38l-2 5M26 38l-2 5M34 38l-2 5"/>';
+    else if ((code >= 71 && code <= 77) || code === 85 || code === 86) inner = cloud + '<path d="M18 40h.1M26 40h.1M34 40h.1M22 45h.1M30 45h.1"/>';
+    else inner = cloud + '<path d="M27 36l-4 6h6l-4 6"/>';
+    return "<svg " + a + ">" + inner + "</svg>";
+  }
+  function renderWeather() {
+    var w = S.weather; $("w-city").textContent = CFG.city;
+    if (!w) { $("b-weather").innerHTML = '<div class="empty">' + (failed.weather ? "Hava durumu alınamadı." : "Yükleniyor…") + "</div>"; metaFor("weather"); return; }
+    var days = w.days.map(function (d) {
+      return '<div class="w-day">' + d.n + wIcon(d.c) + "<b class=\"num\">" + Math.round(d.hi) + "°</b></div>";
+    }).join("");
+    $("b-weather").innerHTML = '<div class="weather"><div class="ic">' + wIcon(w.code) + '</div><div><div class="w-temp num">' + Math.round(w.temp) + "°C</div>" +
+      '<div class="w-sub">' + WCODE(w.code) + " · Rüzgâr " + Math.round(w.wind) + ' km/sa</div></div><div class="w-days">' + days + "</div></div>";
+    metaFor("weather");
+  }
+  function loadWeather() {
+    var u = "https://api.open-meteo.com/v1/forecast?latitude=" + CFG.lat + "&longitude=" + CFG.lon +
+      "&current=temperature_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,weather_code&timezone=auto&forecast_days=4";
+    return getJSON([u]).then(function (j) {
+      var days = [];
+      for (var i = 1; i < j.daily.time.length && i < 4; i++) {
+        var dt = new Date(j.daily.time[i] + "T12:00:00");
+        days.push({ n: dt.toLocaleDateString("tr-TR", { weekday: "short" }), hi: j.daily.temperature_2m_max[i], c: j.daily.weather_code[i] });
+      }
+      S.weather = { temp: j.current.temperature_2m, code: j.current.weather_code, wind: j.current.wind_speed_10m, days: days };
+      S.times.weather = Date.now(); failed.weather = false; save();
+    }).catch(function () { failed.weather = true; }).then(renderWeather);
+  }
+
+  // ---- Piyasa durumu ----
+  function tick() {
+    try {
+      var now = new Date();
+      var p = new Intl.DateTimeFormat("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit", day: "numeric", month: "long", weekday: "long", hour12: false }).formatToParts(now);
+      var g = function (t) { var x = p.filter(function (q) { return q.type === t; })[0]; return x ? x.value : ""; };
+      $("clock").textContent = g("day") + " " + g("month") + " " + g("weekday") + " · " + g("hour") + ":" + g("minute") + " (İstanbul)";
+      var wd = new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Istanbul", weekday: "short" }).format(now);
+      var mins = parseInt(g("hour"), 10) * 60 + parseInt(g("minute"), 10);
+      var isWd = ["Mon", "Tue", "Wed", "Thu", "Fri"].indexOf(wd) > -1;
+      var open = isWd && mins >= 600 && mins < 1080;
+      var txt;
+      if (open) txt = "Seans açık · 18:00'e kadar";
+      else if (isWd && mins < 600) txt = "Kapalı · bugün 10:00'da açılır";
+      else if (wd === "Fri" || wd === "Sat" || wd === "Sun") txt = "Kapalı · Pazartesi 10:00'da açılır";
+      else txt = "Kapalı · yarın 10:00'da açılır";
+      $("bist-pill").className = "pill" + (open ? "" : " closed");
+      $("bist-text").textContent = txt;
+    } catch (e) {}
+  }
+
+  // ---- BIST ----
+  function parseYahoo(j) {
+    var r = j.chart.result[0], m = r.meta;
+    var closes = ((r.indicators && r.indicators.quote && r.indicators.quote[0].close) || []).filter(function (v) { return v != null; });
+    var prev = m.chartPreviousClose != null ? m.chartPreviousClose : m.previousClose;
+    var price = m.regularMarketPrice;
+    return { price: price, chg: prev ? (price - prev) / prev * 100 : null, vol: m.regularMarketVolume || 0, spark: down(closes, 40) };
+  }
+  function yahoo(sym) {
+    return getJSON(viaProxy("https://query1.finance.yahoo.com/v8/finance/chart/" + sym + "?range=1d&interval=15m")).then(parseYahoo);
+  }
+  function renderBist() {
+    var b = S.bist, el = $("b-bist");
+    if (!b) { el.innerHTML = '<div class="empty">' + (failed.bist ? "BIST verisi alınamadı. Ücretsiz kaynak geçici olarak yanıt vermiyor olabilir, birazdan yeniden denenecek." : "Yükleniyor…") + "</div>"; metaFor("bist"); return; }
+    var html = '<div class="idx"><div><div class="n">BIST 100</div><div class="v num">' + fmt(b.index.price, 2) + "</div>" + chgHTML(b.index.chg) + "</div>" + spark(b.index.spark, 110, 44, b.index.chg, "big") + "</div>";
+    if (b.top && b.top.length) {
+      html += '<div class="sub"><h3>En çok işlem gören 3 hisse</h3>' + b.top.map(function (s) {
+        return '<div class="srow2"><div><div class="t">' + s.t + '</div><div class="d">' + s.d + " · hacim " + fmtTL(s.turn) + '</div></div><div class="r"><div class="p num">' + fmt(s.price, 2) + " ₺</div>" + chgHTML(s.chg) + "</div></div>";
+      }).join("") + "</div>";
+    }
+    el.innerHTML = html; metaFor("bist");
+  }
+  function loadBist() {
+    var idx = yahoo("XU100.IS");
+    var stocks = mapLimit(CFG.stocks, 4, function (s) {
+      return yahoo(s[0] + ".IS").then(function (q) { q.t = s[0]; q.d = s[1]; q.turn = q.price * q.vol; return q; });
+    });
+    return Promise.all([idx.catch(function () { return null; }), stocks]).then(function (r) {
+      if (!r[0]) throw new Error("no index");
+      var top = r[1].filter(function (x) { return x && x.turn > 0; }).sort(function (a, b) { return b.turn - a.turn; }).slice(0, 3);
+      S.bist = { index: r[0], top: top.length ? top : ((S.bist && S.bist.top) || []) };
+      S.times.bist = Date.now(); failed.bist = false; save();
+    }).catch(function () { failed.bist = true; }).then(renderBist);
+  }
+
+  // ---- Kripto (ve altın değişimi için PAXG) ----
+  function renderCrypto() {
+    var c = S.crypto, el = $("b-crypto");
+    if (!c) { el.innerHTML = '<div class="empty">' + (failed.crypto ? "Kripto verisi alınamadı." : "Yükleniyor…") + "</div>"; metaFor("crypto"); return; }
+    el.innerHTML = COINS.map(function (k) {
+      var x = c[k[0]]; if (!x) return "";
+      return row({ t: k[1], d: k[2], p: usd(x.price), c: x.chg, s: x.s });
+    }).join(""); metaFor("crypto");
+  }
+  function loadCrypto() {
+    var ids = COINS.map(function (k) { return k[0]; }).concat(["pax-gold"]).join(",");
+    var u = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" + ids + "&sparkline=true&price_change_percentage=24h";
+    return getJSON([u]).then(function (arr) {
+      var out = {};
+      arr.forEach(function (x) {
+        out[x.id] = { price: x.current_price, chg: x.price_change_percentage_24h, s: down((x.sparkline_in_7d && x.sparkline_in_7d.price) || [], 30) };
+      });
+      S.crypto = out; S.times.crypto = Date.now(); failed.crypto = false; save();
+    }).catch(function () { failed.crypto = true; }).then(function () { renderCrypto(); renderFx(); });
+  }
+
+  // ---- Altın ve gümüş ----
+  function dayChange(key, price) {
+    try {
+      var today = new Date().toISOString().slice(0, 10);
+      var r = JSON.parse(localStorage.getItem("ref_" + key) || "null") || {};
+      if (r.day !== today) r = { day: today, prev: r.last || null, last: price }; else r.last = price;
+      localStorage.setItem("ref_" + key, JSON.stringify(r));
+      if (r.prev) return (price - r.prev) / r.prev * 100;
+    } catch (e) {}
+    return null;
+  }
+  function loadMetals() {
+    return Promise.all([
+      getJSON(["https://api.gold-api.com/price/XAU"]).catch(function () { return null; }),
+      getJSON(["https://api.gold-api.com/price/XAG"]).catch(function () { return null; })
+    ]).then(function (r) {
+      var m = S.metals || {};
+      if (r[0] && r[0].price) { m.gold = r[0].price; }
+      if (r[1] && r[1].price) { m.silver = r[1].price; m.silverChg = dayChange("XAG", r[1].price); }
+      if (!r[0] && !r[1]) throw new Error("no metals");
+      S.metals = m; S.times.metals = Date.now(); failed.metals = false; save();
+    }).catch(function () { failed.metals = true; }).then(renderFx);
+  }
+
+  // ---- Döviz ----
+  function loadFx() {
+    var d = new Date(Date.now() - 12 * 864e5).toISOString().slice(0, 10);
+    var u = "https://api.frankfurter.app/" + d + "..?from=EUR&to=USD,TRY";
+    return getJSON([u]).then(function (j) {
+      var keys = Object.keys(j.rates).sort();
+      S.fx = {
+        eurusd: keys.map(function (k) { return j.rates[k].USD; }),
+        usdtry: keys.map(function (k) { return j.rates[k].TRY / j.rates[k].USD; }),
+        eurtry: keys.map(function (k) { return j.rates[k].TRY; })
+      };
+      S.times.fx = Date.now(); failed.fx = false; save();
+    }).catch(function () { failed.fx = true; }).then(renderFx);
+  }
+  function lastChg(a) { return a.length > 1 ? (a[a.length - 1] - a[a.length - 2]) / a[a.length - 2] * 100 : null; }
+  function renderFx() {
+    var html = "";
+    if (S.fx) {
+      html += row({ t: "EUR/USD", d: "Euro / Dolar", p: fmt(S.fx.eurusd[S.fx.eurusd.length - 1], 4), c: lastChg(S.fx.eurusd), s: S.fx.eurusd });
+    }
+    var m = S.metals || {}, pax = S.crypto && S.crypto["pax-gold"];
+    var gold = m.gold || (pax && pax.price);
+    if (gold) html += row({ t: "Altın", d: "Ons · USD", p: "$" + fmt(gold, 2), c: pax ? pax.chg : null, s: pax ? pax.s : null });
+    if (m.silver) html += row({ t: "Gümüş", d: "Ons · USD", p: "$" + fmt(m.silver, 2), c: m.silverChg, s: null });
+    if (S.fx) {
+      html += row({ t: "USD/TRY", d: "Dolar / Lira", p: fmt(S.fx.usdtry[S.fx.usdtry.length - 1], 4), c: lastChg(S.fx.usdtry), s: S.fx.usdtry });
+      html += row({ t: "EUR/TRY", d: "Euro / Lira", p: fmt(S.fx.eurtry[S.fx.eurtry.length - 1], 4), c: lastChg(S.fx.eurtry), s: S.fx.eurtry });
+    }
+    $("b-fx").innerHTML = html || '<div class="empty">' + ((failed.fx && failed.metals) ? "Döviz ve metal verisi alınamadı." : "Yükleniyor…") + "</div>";
+    var anyFail = failed.fx || failed.metals, t = Math.max(S.times.fx || 0, S.times.metals || 0);
+    if (anyFail) setMeta("fx", t ? "kısmen eski · " + hhmm(t) : "alınamadı", true);
+    else if (t) setMeta("fx", "güncel · " + hhmm(t) + " (kur: günlük ECB)", false);
+  }
+
+  // ---- Yenileme ----
+  var SRC = {
+    weather: { every: 600, fn: loadWeather }, crypto: { every: 60, fn: loadCrypto },
+    metals: { every: 60, fn: loadMetals }, fx: { every: 1800, fn: loadFx }, bist: { every: 120, fn: loadBist }
+  };
+  var busy = false;
+  function refresh(force) {
+    var now = Date.now(), jobs = [];
+    Object.keys(SRC).forEach(function (k) {
+      var s = SRC[k];
+      if (force || !s.t || now - s.t > s.every * 1000) { s.t = now; jobs.push(s.fn()); }
+    });
+    if (!jobs.length) return;
+    busy = true; $("refresh").className = "spin";
+    Promise.all(jobs).then(function () { busy = false; $("refresh").className = ""; stamp(); });
+  }
+
+  renderWeather(); renderBist(); renderCrypto(); renderFx(); stamp(); tick();
+  setInterval(tick, 30000);
+  setInterval(function () { if (document.visibilityState !== "hidden") refresh(false); }, 30000);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") { tick(); refresh(false); } });
+  $("refresh").addEventListener("click", function () { if (!busy) refresh(true); });
+  refresh(true);
+})();
+</script>
+</body>
+</html>
